@@ -1,0 +1,23 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/api/Dockerfile 
+      args:
+        DEVELOPMENT: 1
+    volumes:
+      - .:/app
+      - /app/.venv # .vnevを空ディレクトリで上書きする
+    expose:
+      - '8080'
+    tty: true
+
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    volumes:
+      - ./docker/nginx/nginx.local.conf:/etc/nginx/nginx.conf
+    ports:
+      - '8000:8000'
+    tty: true

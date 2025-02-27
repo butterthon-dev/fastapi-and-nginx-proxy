@@ -1,0 +1,26 @@
+steps:
+  # Dockerイメージビルド
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      [
+        'build',
+        '--no-cache',
+        '-t',
+        '$_BASE_ARTIFACT_REGISTRY/$_ARTIFACT_REGISTRY_REPOSITORY/$_IMAGE:latest',
+        '.',
+        '-f',
+        './docker/api/Dockerfile',
+      ]
+    timeout: 6000s
+
+  # ArtifactRegistryにDockerイメージをプッシュ
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', '$_BASE_ARTIFACT_REGISTRY/$_ARTIFACT_REGISTRY_REPOSITORY/$_IMAGE', '--all-tags']
+
+substitutions:
+  _BASE_ARTIFACT_REGISTRY: asia-northeast1-docker.pkg.dev/hoge
+  _ARTIFACT_REGISTRY_REPOSITORY: nginx-proxy-and-fastapi-sample
+  _IMAGE: app
+
+options:
+  logging: CLOUD_LOGGING_ONLY
