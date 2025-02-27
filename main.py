@@ -10,5 +10,5 @@ async def root():
 
 
 @app.get('/healthz')
-async def root():
+async def healthz():
     return {'result': 'healthy'}
